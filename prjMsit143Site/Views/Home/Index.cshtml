@@ -7,12 +7,19 @@
         h1 {
             color: burlywood
         }
+        li{
+            text-align:left
+        }
+        .Molly {
+            text-align: center;
+            border: dotted 5px #C4E1FF
+        }
     </style>
 }
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <ul id="Ul">
-        <li>Molly</li>
+        <li style="color:blue" class="Molly">Molly's HomeWork</li>
     </ul>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
@@ -57,15 +64,17 @@
         //    docFrag.appendChild(eleLi);
         //}
         //theUl.appendChild(docFrag)
+        const theUl = document.querySelector("#Ul")
+        const docFrag = document.createDocumentFragment()
 
-        for (let i = 0,  max = DATAS.length; i < max; i++) {
-            console.log(DATAS[i].Name);
-            console.log(DATAS[i].Add);
-            console.log(DATAS[i].Opentime);
-
-
+        for (let i = 0; i < DATAS.length; i++) {
+            const { Name, Add, Tel, Ticketinfo} = DATAS[i];
+            const txtLi = document.createTextNode(Name + ", " + Add + ", " + Tel + ", " + Ticketinfo);
+            const eleLi = document.createElement("li");
+            eleLi.appendChild(txtLi)
+            docFrag.appendChild(eleLi)
         }
-        
+        theUl.appendChild(docFrag)
 
 
 
