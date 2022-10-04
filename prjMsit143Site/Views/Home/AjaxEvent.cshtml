@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "AjaxEvent";
+}
+
+@section Styles{
+    <style>
+        #img1 {
+            display: none;
+        }
+    </style>
+}
+
+<h1>AjaxEvent</h1>
+
+<button class="btn btn-primary" id="buttonStart">Start</button>
+<button class="btn btn-danger" id="buttonStop">Stop</button>
+<img src="~/images/E6jHg4U.gif" id="img1" />
+<div class="alert alert-warning" role="alert" id="div1"></div>
+
+@section Scripts{
+    <script>
+
+        const btnStart = document.querySelector("#buttonStart")
+        const btnStop = document.querySelector("#buttonStop")
+        const imgLoading = document.querySelector("#img1")
+        const divMessage = document.querySelector("#div1")
+        const xhr = new XMLHttpRequest()
+
+
+        btnStop.addEventListener("click",()=> {
+            xhr.abort()  //停止ajax執行
+        })
+
+        btnStart.addEventListener("click", () => {
+            //Ajax 程式
+            const xhr = new XMLHttpRequest()
+            xhr.addEventListener("load", () => {
+                const data = xhr.responseText
+                console.log("load")
+            })
+            xhr.addEventListener("loadstart", () => {
+                console.log("Ajax開始")
+                btnStart.textContent = "Loading..."
+                btnStart.setAttribute("disabled", "disabled") //<button disabled="disabled"
+                imgLoading.style.display = "inline"
+            })
+            xhr.addEventListener("loadend", () => {
+                console.log("Ajax結束")
+                btnStart.textContent = "Start"
+                btnStart.removeAttribute("disabled") //<button disabled="disabled"
+                imgLoading.style.display = "none"
+            })
+
+            xhr.addEventListener("timeout", () => {
+                console.log("timeout")
+                divMessage.textContent="伺服器忙碌中請稍後再來!!"
+            })
+
+            xhr.addEventListener("abort", () => {
+                console.log("abort")
+                divMessage.textContent = "您停止了Ajax的執行!!"
+            })
+
+            xhr.open("GET", "/API/sleep")
+            xhr.timeout = 3000
+            xhr.send()
+
+        })
+
+    </script>
+}

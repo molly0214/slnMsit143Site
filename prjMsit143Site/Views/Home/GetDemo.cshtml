@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "GetDemo";
+}
+
+
+
+<h1>GetDemo</h1>
+<input type="text" id="textbox1" />
+<button id="button1" class="btn btn-warning">Click</button>
+<div class="alert alert-warning" role="alert" id="div1"></div>
+@section Scripts{
+    <script>
+        const btn = document.querySelector("#button1")
+        const txtBox = document.querySelector("#textbox1")
+        const theDiv = document.querySelector("#div1")
+        btn.addEventListener("click", () => {
+            //讀取textbox中的資料
+            console.log(txtBox.value)
+            //Todo
+            //將textbox中的資料傳到伺服器
+            //伺服器收到資料後回傳hello....
+
+            //步驟一建立ajax物件
+            const xhr = new XMLHttpRequest()
+            //步驟二發出要求
+            xhr.open("GET", `/API/index?keyword=${txtBox.value}`)
+            xhr.send()
+
+            //步驟三接收資料
+            xhr.addEventListener("load", () => {
+                const data = xhr.responseText
+                theDiv.textContent = data
+            })
+        })
+
+
+
+
+    </script>
+}

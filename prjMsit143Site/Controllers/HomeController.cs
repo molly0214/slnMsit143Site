@@ -27,7 +27,14 @@ namespace prjMsit143Site.Controllers
         {
             return View();
         }
-
+        public IActionResult GetDemo()
+        {
+            return View();
+        }
+        public IActionResult AjaxEvent()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
