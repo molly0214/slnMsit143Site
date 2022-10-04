@@ -23,7 +23,10 @@
             theDiv.innerHTML = `<h3>${data}</h3>`
         })
         //步驟二發出要求
-        xhr.open("GET", "/API/index")
+        //用下列兩種方法取得路徑
+       @*console.log("@Url.Action("register","api")")
+       console.log("@Url.Content("~/api/index")")*@
+        xhr.open("GET", "@Url.Content("~/API/index")")
         xhr.send()
     </script>
 }

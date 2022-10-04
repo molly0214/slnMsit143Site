@@ -20,21 +20,16 @@
 
 @section Scripts{
     <script>
-
         const btnStart = document.querySelector("#buttonStart")
         const btnStop = document.querySelector("#buttonStop")
         const imgLoading = document.querySelector("#img1")
         const divMessage = document.querySelector("#div1")
-        const xhr = new XMLHttpRequest()
-
-
-        btnStop.addEventListener("click",()=> {
-            xhr.abort()  //停止ajax執行
+        const xhr = new XMLHttpRequest()  //建立Ajax物件
+        btnStop.addEventListener("click", () => {
+            xhr.abort() //停止Ajax執行
         })
-
         btnStart.addEventListener("click", () => {
             //Ajax 程式
-            const xhr = new XMLHttpRequest()
             xhr.addEventListener("load", () => {
                 const data = xhr.responseText
                 console.log("load")
@@ -42,31 +37,29 @@
             xhr.addEventListener("loadstart", () => {
                 console.log("Ajax開始")
                 btnStart.textContent = "Loading..."
+                //讓使用這不能按下按鈕
                 btnStart.setAttribute("disabled", "disabled") //<button disabled="disabled"
-                imgLoading.style.display = "inline"
+                imgLoading.style.display = "inline" //顯示圖片
             })
             xhr.addEventListener("loadend", () => {
                 console.log("Ajax結束")
                 btnStart.textContent = "Start"
-                btnStart.removeAttribute("disabled") //<button disabled="disabled"
-                imgLoading.style.display = "none"
+                btnStart.removeAttribute("disabled") //移除disabled屬性
+                imgLoading.style.display = "none" //隱藏圖片
             })
-
+            //timeout屬性設定的時間到了，會觸發此事件
             xhr.addEventListener("timeout", () => {
                 console.log("timeout")
-                divMessage.textContent="伺服器忙碌中請稍後再來!!"
+                divMessage.textContent = "伺服器忙碌中請稍後再來!!"
             })
-
+            //abort 方法被執行，會觸發此事件
             xhr.addEventListener("abort", () => {
                 console.log("abort")
                 divMessage.textContent = "您停止了Ajax的執行!!"
             })
-
-            xhr.open("GET", "/API/sleep")
-            xhr.timeout = 3000
-            xhr.send()
-
+            xhr.open("GET", "@Url.Content("~/api/sleep")")
+            xhr.timeout = 3000  //伺服器3秒鐘沒有回傳結果，終止程式的執行
+            xhr.send() //對server發出要求 Ajax開始
         })
-
     </script>
 }
