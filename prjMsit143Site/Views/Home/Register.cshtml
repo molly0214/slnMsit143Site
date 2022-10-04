@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        @* name=abc *@
+        <form name="userInfo" method="post" action="~/api/register">
+            <div class="form-group">
+                <label for="InputName">姓名</label>
+                <input type="text" class="form-control" id="InputName" name="Name">
+                <small id="emailHelp" class="form-text text-muted"></small>
+            </div>
+            <div class="form-group">
+                <label for="InputEmail">電子郵件</label>
+                <input type="email" class="form-control" id="InputEmail" name="Email">
+            </div>
+            <div class="form-group">
+                <label for="InputAge">年紀</label>
+                <input type="number" class="form-control" id="InputAge" name="Age">
+            </div>
+            <div class="form-group">
+                <label for="InputFile">選擇檔案</label>
+                <input type="file" class="form-control-file" id="InputFile" name="File1">
+            </div>
+            <button type="submit" id="buttonSubmit" class="btn btn-primary">送出</button>
+        </form>
+        <div class="alert alert-warning" role="alert" id="div1"></div>
+
+    </div>
+    <div class="col-3"></div>
+</div>
+
+@section Scripts{
+    <script>
+        const btn = document.querySelector("#buttonSubmit")
+        const divMessage = document.querySelector("#div1")
+        btn.addEventListener("click", evt => {
+            evt.preventDefault() //預設行為停止掉
+            const formData = new FormData(document.userInfo);//將userInfo表單中的資料放到formData變數中
+            const xhr = new XMLHttpRequest()
+            xhr.addEventListener("load", () => {
+                const data = xhr.responseText
+                divMessage.textContent = data
+            })
+            xhr.open("POST", document.userInfo.action) 
+            xhr.send(formData)
+        })
+    </script>
+
+}

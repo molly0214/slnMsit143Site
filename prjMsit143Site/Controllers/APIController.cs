@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using prjMsit143Site.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,5 +28,12 @@ namespace prjMsit143Site.Controllers
             return Content("Hello AJAX Event", "text/plain");
         }
 
+        public IActionResult Register(Member member)
+        {
+
+            //todo 把收到的會員資料寫進資料庫裡
+            return Content(member.Name, "text/plain");
+
+        }
     }
 }

@@ -148,5 +148,13 @@ namespace prjMsit143Site.Controllers
         {
             return _context.Members.Any(e => e.MemberId == id);
         }
+        public FileResult ShowPhoto(int id)
+        {
+            Member member = _context.Members.Find(id);
+            byte[] content = member.FileData;
+            return File(content, "image/jpeg");
+        }
+
+
     }
 }
