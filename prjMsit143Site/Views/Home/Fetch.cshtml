@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "Fetch";
+}
+
+<h1>Fetch</h1>
+<div class="alert alert-warning" role="alert" id="div1"></div>
+
+@section Scripts{
+    <script>
+        const divMessage = document.querySelector("#div1")
+        @*console.log(fetch("@Url.Content("~/API/index")"))*@
+
+        @*fetch("@Url.Content("~/API/index")")
+            .then(response => {
+                console.log(response);
+                console.log(response.headers.get('Content-Type'));
+                console.log(response.headers.get('Content-Encoding'));
+                console.log(response.headers.get('Date'));
+                console.log(response.body);
+                console.log(response.status);
+                console.log(response.url);
+                console.log(response.ok);
+                確認server程式執行時有沒有問題
+                if (response.ok) {
+
+                } else {
+                    console.log(response.status)
+                }
+            })*@
+
+        fetch("@Url.Content("~/API/index")")
+            .then(response => response.text())
+            .then(data => divMessage.textContent = data)
+            .catch(err => console.log(err))
+
+
+
+    </script>
+}

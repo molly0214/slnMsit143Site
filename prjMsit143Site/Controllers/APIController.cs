@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using prjMsit143Site.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,47 +12,84 @@ namespace prjMsit143Site.Controllers
 {
     public class APIController : Controller
     {
+        private readonly IWebHostEnvironment _host;
         private readonly DemoContext _context;
-        public APIController(DemoContext context)  //相依性注入
+        public APIController (IWebHostEnvironment host, DemoContext context)
         {
+            _host = host;
             _context = context;
         }
-        public IActionResult Index(string keyword)//接收client傳過來的資料
+        //http://localhost.../api/index
+        public IActionResult Index(string keyword) //接收client傳過來的資料
         {
-            //https://localhost:44306/API/index
-            //回應單純字串 "HELLO AJAX!!"
-
             if (String.IsNullOrEmpty(keyword))
             {
-                keyword = "AJAX";
+                keyword = "Ajax";
             }
-
-            return Content($"{ keyword},AJAX!", "text/html",System.Text.Encoding.UTF8);
+            //回應單純字串 "Hello Ajax!!"
+            return Content($"{keyword}, 您好 !!", "text/plain", System.Text.Encoding.UTF8);
         }
 
         public IActionResult Sleep()
         {
             System.Threading.Thread.Sleep(5000);
-            return Content("Hello AJAX Event", "text/plain");
+            return Content("Hello Ajax Event", "text/plain");
         }
 
-        public IActionResult Register(Member member)
+        public IActionResult Register(Member member, IFormFile File1)
         {
-            //todo 把收到的會員資料寫進資料庫裡
+            string filePath = Path.Combine(_host.WebRootPath, "uploads", File1.FileName);
+            //將檔案存到資料夾中
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                File1.CopyTo(fileStream);
+            }
+            //將檔案轉成二進位
+            byte[] imgByte = null;
+            using (var memoryStream = new MemoryStream())
+            {
+                File1.CopyTo(memoryStream);
+                imgByte = memoryStream.ToArray();
+            }
+            member.FileName = File1.FileName;
+            member.FileData = imgByte;
+
+            //todo 將收到會員資料寫進資料庫中
             _context.Members.Add(member);
             _context.SaveChanges();
-            return Content(member.Name, "text/plain");
+
+            //檔案上傳要知道實際路徑
+            //要透過程式動態的取得程式執行當下的實際路徑
+            //取得wwwroot的實際路徑
+            // string info = _host.WebRootPath; 
+            //取得專案資料夾的實際路徑
+            //string info = _host.ContentRootPath; 
+
+            //string info = $"{File1.FileName} - {File1.ContentType} - {File1.Length}";
+            return Content(filePath, "text/plain");
         }
-        public IActionResult CheckAccount(string Name)
+
+        //根據城市名稱讀取鄉鎮區的資料
+        public IActionResult City()
         {
-            bool LogOut = _context.Members.Any(e => e.Name == Name);
-            if (string.IsNullOrEmpty(Name))
-                return Content("請輸入文字", "text/plain");
-            else if (LogOut)
-                return Content("帳號已存在", "text/plain");
-            else
-                return Content("", "text/plain");
+            var cities = _context.Addresses.Select(a => a.City).Distinct();
+            return Json(cities);
+        }
+
+        //根據城市名稱讀取鄉鎮區的資料
+        public IActionResult Site(string city)
+        {
+            var sites = _context.Addresses.Where(a => a.City == city).Select(a => a.SiteId).Distinct();
+            return Json(sites);
+        }
+
+
+        //根據鄉鎮區名稱讀取路的資料
+        public IActionResult Road(string site)
+        {
+            var roads = _context.Addresses.Where(a => a.SiteId == site).Select(a => a.Road).Distinct();
+            return Json(roads);
         }
 
     }
-}
+    }

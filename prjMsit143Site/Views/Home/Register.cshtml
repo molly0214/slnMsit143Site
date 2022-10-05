@@ -7,7 +7,6 @@
 <div class="row">
     <div class="col-3"></div>
     <div class="col-6">
-        @* name=abc *@
         <form name="userInfo" method="post" enctype="multipart/form-data" action="~/API/Register">
             <div class="form-group">
                 <label for="InputName">姓名</label>
@@ -38,32 +37,17 @@
     <script>
         const btn = document.querySelector("#buttonSubmit")
         const divMessage = document.querySelector("#div1")
-        const txtName = document.querySelector("#InputName")
-        const alert = document.querySelector("#emailHelp")
-        const xhr = new XMLHttpRequest();
+        btn.addEventListener("click", evt => {
+            evt.preventDefault() //預設行為停止掉
 
-        btn.addEventListener("click", event => {
-            event.preventDefault();
-            const formData = new FormData(document.userInfo);    //將userInfo表單中的資料放到formData變數中
+            const formData = new FormData(document.userInfo);//將userInfo表單中的資料放到formData變數中
+            const xhr = new XMLHttpRequest()
             xhr.addEventListener("load", () => {
                 const data = xhr.responseText
                 divMessage.textContent = data
-
-        })
-            xhr.open("POST", document.userInfo.action)
+            })
+            xhr.open("POST", document.userInfo.action) //"/api/register"
             xhr.send(formData)
         })
-        txtName.addEventListener("blur", () => {
-        xhr.addEventListener("load", () => {
-            const data = xhr.responseText;
-            alert.textContent = data;
-        })
-        const url = "@Url.Content("~/API/CheckAccount")"
-        const params = `?Name=${txtName.value}`
-        xhr.open("Get", url + params);
-        xhr.send();
-    })
-
     </script>
-
 }
