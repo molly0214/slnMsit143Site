@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "AutoComplete";
+}
+ 
+<h1>AutoComplete</h1>
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <h3>AutoComplete</h3>
+        <input type="text" class="form-control" id="autoComplete">
+
+        <div class="list-group mt-3">
+            <button type="button" class="list-group-item list-group-item-action" aria-current="true">
+                The current button
+            </button>
+            <button type="button" class="list-group-item list-group-item-action">A second item</button>
+            <button type="button" class="list-group-item list-group-item-action">A third button item</button>
+            <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>
+            <button type="button" class="list-group-item list-group-item-action" disabled>A disabled button item</button>
+        </div>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+@section Scripts{
+    <script src="~/js/travel.js"></script>
+    <script>
+        //keydown keyup keypress input
+        const inputText = document.querySelector("#autoComplete")
+        const listData = document.querySelector(".list-group")
+        listData.style.display = "none"
+        inputText.addEventListener("input", () => {
+            const keyword = inputText.value
+            listData.style.display = "block"
+            //找到字就回傳字的索引值，找不到就回傳-1
+            //results = []
+            let results = DATAS.filter(data => data.Name.indexOf(keyword) !== -1)
+            let htmlDatas = results.map(data => {
+                return (
+                    `
+        <button type="button" onclick="read(event)" class="list-group-item list-group-item-action">${data.Name}</button>
+                   `
+                )
+            })
+            listData.innerHTML = htmlDatas.join("")
+        })
+        function read(evt) {
+            inputText.value = evt.target.textContent
+            listData.style.display = "none"
+        }
+    </script>
+
+}

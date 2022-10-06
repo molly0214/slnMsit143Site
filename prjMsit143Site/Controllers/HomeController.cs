@@ -61,6 +61,12 @@ namespace prjMsit143Site.Controllers
         {
             return View();
         }
+
+        public IActionResult AutoComplete()
+        {
+            return View();
+        }
+
         public IActionResult ShipperCors()
         {
             return View();
