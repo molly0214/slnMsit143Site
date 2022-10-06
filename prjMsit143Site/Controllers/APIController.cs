@@ -91,5 +91,13 @@ namespace prjMsit143Site.Controllers
             return Json(roads);
         }
 
-    }
+        public IActionResult CheckAccount(string name)
+        {
+            var exists= _context.Members.Any(m => m.Name == name);
+            return Content(exists.ToString(), "text/plain");
+
+        }
+
+
+        }
     }

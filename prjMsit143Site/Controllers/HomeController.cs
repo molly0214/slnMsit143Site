@@ -53,7 +53,22 @@ namespace prjMsit143Site.Controllers
         {
             return View();
         }
-
+        public IActionResult History()
+        {
+            return View();
+        }
+        public IActionResult jQuery()
+        {
+            return View();
+        }
+        public IActionResult ShipperCors()
+        {
+            return View();
+        }
+        public IActionResult ShippShipperCorsEmptyerCors()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
